@@ -29,3 +29,8 @@ def test_item_2():
     assert Item.string_to_number('0.35') == 0
     assert Item.string_to_number(False) == 0
 
+
+def test_item_3():
+    item = Item('Smartphone', 200, 10)
+    assert repr(item) == "Item('Smartphone', 200, 10)"
+    assert str(item) == 'Smartphone'
