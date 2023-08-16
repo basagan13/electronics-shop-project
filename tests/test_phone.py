@@ -10,9 +10,11 @@ def test_phone_4():
     assert test1.calculate_total_price() == 20000
     assert test1.__str__() == "Nokia"
     assert test1.__repr__() == "Phone('Nokia', 2000, 10, 1)"
+    test1.number_of_sim = 2
     with pytest.raises(ValueError):
         test1.number_of_sim = 0
-        test3 = Phone('Model', 0, 0, 0)
+        test3 = Phone('Model', 10, 10, 0)
+        test1 + 10
 
     test2 = Phone('Sony', 2500, 30, 2)
     assert test1 + test2 == 40
