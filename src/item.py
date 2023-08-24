@@ -1,7 +1,18 @@
-import csv
+import csv, os
 
 
-class Item:
+class InstantiateCSVError(Exception):
+    def __init__(self, *args, **kwargs):
+        if len(args) > 0:
+            self.message = args[0]
+        else:
+            self.message = f'Файл поврежден'
+
+    def __str__(self):
+        return self.message
+
+
+class Item(InstantiateCSVErrorMixin):
     """
     Класс для представления товара в магазине.
     """
@@ -57,10 +68,15 @@ class Item:
         self.__name = new_name
 
     @classmethod
-    def instantiate_from_csv(cls, CSV_FILE):
-        with open(CSV_FILE, newline='') as csvfile:
+    def instantiate_from_csv(cls, csv_file=None):
+        csv_file = os.path.join('..', 'src', 'items.csv')
+        if csv_file is None:
+            raise FileNotFoundError('Отсутствует файл')
+        with open(csv_file, newline='') as csvfile:
             Item.all.clear()
             reader = csv.DictReader(csvfile)
+            if reader.fieldnames != 3:
+                raise InstantiateCSVError
             for row in reader:
                 name = row['name']
                 price = float(row['price'])
