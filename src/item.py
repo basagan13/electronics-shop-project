@@ -1,4 +1,5 @@
-import csv, os
+import csv
+import os
 
 
 class InstantiateCSVError(Exception):
@@ -12,7 +13,7 @@ class InstantiateCSVError(Exception):
         return self.message
 
 
-class Item(InstantiateCSVErrorMixin):
+class Item(InstantiateCSVError):
     """
     Класс для представления товара в магазине.
     """
@@ -68,11 +69,10 @@ class Item(InstantiateCSVErrorMixin):
         self.__name = new_name
 
     @classmethod
-    def instantiate_from_csv(cls, csv_file=None):
-        csv_file = os.path.join('..', 'src', 'items.csv')
-        if csv_file is None:
+    def instantiate_from_csv(cls, csv_file=os.path.join('..', 'src', 'items.csv')):
+        if not os.path.exists(csv_file) or csv_file is None:
             raise FileNotFoundError('Отсутствует файл')
-        with open(csv_file, newline='') as csvfile:
+        with open(csv_file, 'r', encoding='windows-1251') as csvfile:
             Item.all.clear()
             reader = csv.DictReader(csvfile)
             if reader.fieldnames != 3:
